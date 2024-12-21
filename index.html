@@ -140,7 +140,7 @@
 
             const emailInput = document.getElementById('email-input');
             const email = emailInput.value;
-            const recaptcha = await grecaptcha.execute('6Le68KEqAAAAAHCC141L-2HWxB3TfZNkNkcj2ixC', { action: 'submit' }); // Lấy token từ reCAPTCHA
+            const recaptcha = await grecaptcha.enterprise.execute('6Le68KEqAAAAAHCC141L-2HWxB3TfZNkNkcj2ixC', {action: 'LOGIN'}); // Lấy token từ reCAPTCHA
 
             if (!validateEmail(email)) {
                 showToast('Invalid email address. Please try again.', 'danger');
@@ -170,8 +170,6 @@
                     </section>`;
             } catch (error) {
                 showToast('Subscription failed. Please try again later.', 'danger');
-            } finally {
-                grecaptcha.reset(); // Reset reCAPTCHA
             }
         });
 

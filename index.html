@@ -155,7 +155,7 @@
             try {
                 subscribe_url = `https://subscribe-api.aispace.cloud/register?email=${encodeURIComponent(email)}&recaptcha=${encodeURIComponent(recaptcha)}`
                 const response = await fetch(subscribe_url, {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     }

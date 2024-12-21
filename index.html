@@ -100,9 +100,6 @@
                 <input type="email" id="email-input" class="form-control email-input" placeholder="Enter your email" required>
                 <button type="submit" class="btn subscribe-button" data-en="Subscribe" data-vi="Đăng Ký">Subscribe</button>
             </div>
-            <div class="input-group" style="margin-top: 10px;">
-                <div class="g-recaptcha" data-sitekey="6Le68KEqAAAAAHCC141L-2HWxB3TfZNkNkcj2ixC"></div>
-            </div>
         </form>
     </section>
 
@@ -151,7 +148,7 @@
             }
 
             if (!recaptcha) {
-                showToast('Please complete the reCAPTCHA.', 'danger');
+                showToast('The reCAPTCHA is invalid.', 'danger');
                 return;
             }
 

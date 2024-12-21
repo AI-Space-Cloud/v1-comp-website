@@ -126,14 +126,26 @@
         const langButtons = document.querySelectorAll('#lang-en, #lang-vi');
         const toastContainer = document.getElementById('toast-container');
 
+        // Kiểm tra và áp dụng ngôn ngữ đã lưu trong localStorage khi trang được tải lại
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('language') || 'en'; // Lấy ngôn ngữ từ localStorage (hoặc mặc định là tiếng Anh)
+            applyLanguage(savedLang);
+        });
+
         langButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const lang = button.id.split('-')[1];
-                document.querySelectorAll('[data-en]').forEach(el => {
-                    el.innerHTML = el.getAttribute(`data-${lang}`);
-                });
+                localStorage.setItem('language', lang);  // Lưu ngôn ngữ vào localStorage
+                applyLanguage(lang);  // Áp dụng ngôn ngữ
             });
         });
+
+        // Hàm thay đổi ngôn ngữ của trang
+        function applyLanguage(lang) {
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${lang}`);
+            });
+        }
 
         document.getElementById('subscribe-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -163,11 +175,13 @@
 
                 if (!response.ok) throw new Error('Failed to subscribe');
 
-                document.body.innerHTML = `
-                    <section class="hero-section">
-                        <h1 class="hero-title" data-en="Subscription Successful" data-vi="Đăng Ký Thành Công">Subscription Successful</h1>
-                        <p class="hero-subtitle" data-en="You will receive the information shortly. Please check your Inbox or Spam folder. Note: emails are sent in batches within 1-3 days." data-vi="Thông tin sẽ được gửi đến bạn sớm nhất. Vui lòng kiểm tra thư mục Inbox hoặc thư mục Spam. Lưu ý: email sẽ được gửi theo từng đợt trong vòng 1-3 ngày.">You will receive the information shortly. Please check your Inbox or Spam folder. Note: emails are sent in batches within 1-3 days.</p>
-                    </section>`;
+                heroSection = document.querySelector('#hero-section');
+                heroSection.innerHTML = `
+                    <h1 class="hero-title" data-en="Subscription Successful" data-vi="Đăng Ký Thành Công">Subscription Successful</h1>
+                    <p class="hero-subtitle" data-en="You will receive the information shortly. Please check your Inbox or Spam folder. Note: emails are sent in batches within 1-3 days." data-vi="Thông tin sẽ được gửi đến bạn sớm nhất. Vui lòng kiểm tra thư mục Inbox hoặc thư mục Spam. Lưu ý: email sẽ được gửi theo từng đợt trong vòng 1-3 ngày.">You will receive the information shortly. Please check your Inbox or Spam folder. Note: emails are sent in batches within 1-3 days.</p>    
+                `;
+                const savedLang = localStorage.getItem('language') || 'en'; // Lấy ngôn ngữ từ localStorage (hoặc mặc định là tiếng Anh)
+                applyLanguage(savedLang);
             } catch (error) {
                 showToast('Subscription failed. Please try again later.', 'danger');
             }

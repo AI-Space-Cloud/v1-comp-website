@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boost Your Business with Our Data</title>
@@ -99,6 +100,9 @@
                 <input type="email" id="email-input" class="form-control email-input" placeholder="Enter your email" required>
                 <button type="submit" class="btn subscribe-button" data-en="Subscribe" data-vi="Đăng Ký">Subscribe</button>
             </div>
+            <div class="input-group" style="margin-top: 10px;">
+                <div class="g-recaptcha" data-sitekey="6LcGAqIqAAAAAOYwX3InrJZDhlkhEt7zijfwAKIp"></div>
+            </div>
         </form>
     </section>
 
@@ -139,19 +143,25 @@
 
             const emailInput = document.getElementById('email-input');
             const email = emailInput.value;
+            const recaptcha = grecaptcha.getResponse(); // Lấy token từ reCAPTCHA
 
             if (!validateEmail(email)) {
                 showToast('Invalid email address. Please try again.', 'danger');
                 return;
             }
 
+            if (!recaptcha) {
+                showToast('Please complete the reCAPTCHA.', 'danger');
+                return;
+            }
+
             try {
-                const response = await fetch('https://example.com/api/subscribe', {
+                const response = await fetch('https://subscribe-api.aispace.cloud/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email }),
+                    body: JSON.stringify({ email, recaptcha }),
                 });
 
                 if (!response.ok) throw new Error('Failed to subscribe');
@@ -163,6 +173,8 @@
                     </section>`;
             } catch (error) {
                 showToast('Subscription failed. Please try again later.', 'danger');
+            } finally {
+                grecaptcha.reset(); // Reset reCAPTCHA
             }
         });
 

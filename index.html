@@ -153,12 +153,12 @@
             }
 
             try {
-                const response = await fetch('https://subscribe-api.aispace.cloud/register', {
+                subscribe_url = `https://subscribe-api.aispace.cloud/register?email=${encodeURIComponent(email)}&recaptcha=${encodeURIComponent(recaptcha)}`
+                const response = await fetch(subscribe_url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, recaptcha }),
+                    }
                 });
 
                 if (!response.ok) throw new Error('Failed to subscribe');
